@@ -1,13 +1,13 @@
 {% set name = "ttp" %}
-{% set version = "0.9.5" %}
+{% set version = "0.10.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/ttp-{{ version }}.tar.gz
-  sha256: 234414f4d3039d2d1cde09993f89f8db1b34d447f76c6a402555cefac2e59c4e
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/ttp-{{ version }}.tar.gz
+  sha256: 9c928aeb1f2dade05419c7ecc756d62cb45857deb5cc6b1b9f2058e70f25ae59
 
 build:
   entry_points:
