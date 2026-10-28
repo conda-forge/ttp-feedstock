@@ -1,0 +1,69 @@
+schema_version: 1
+
+context:
+  version: 0.10.1
+
+package:
+  name: ttp
+  version: ${{ version }}
+
+source:
+  url: https://github.com/dmulyalin/ttp/archive/refs/tags/${{ version }}.tar.gz
+  sha256: e501c511bef8e09a095e488bd1813274cb80360919bc19194918d5bf7a35cbb9
+
+build:
+  number: 0
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv
+  python:
+    entry_points:
+      - ttp = ttp.ttp:cli_tool
+
+requirements:
+  host:
+    - python ${{ python_min }}.*,<4.0
+    - poetry-core >=1.0.0
+    - pip
+  run:
+    - python >=${{ python_min }},<4.0
+
+tests:
+  - python:
+      imports:
+        - ttp
+      pip_check: true
+      python_version:
+        - ${{ python_min }}.*
+        - '*'
+  - requirements:
+      run:
+        - pip
+        - pytest
+        - cerberus
+        - deepdiff
+        - jinja2
+        - openpyxl
+        - pyyaml
+        - python ${{ python_min }}.*
+        - tabulate
+    files:
+      source:
+        - Data
+        - test
+    script:
+      - ttp --help
+      - cd test/pytest
+      # Skip tests requiring unavailable yangson/ttp_templates packages, and tests
+      # whose expected input-file order depends on filesystem directory enumeration.
+      - pytest -vvv -k 'not yangson and not test_loading_template_from_ttp_templates and not test_adding_data_from_files and not test_inputs_url_filters_extensions and not test_group_inputs and not test_inputs_with_template_base_path'
+
+about:
+  summary: Template Text Parser
+  license: MIT
+  license_file: LICENSE
+  homepage: https://github.com/dmulyalin/ttp
+
+extra:
+  recipe-maintainers:
+    - cousinbr
+    - jsmolic
